@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>ジャンル選択</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { background: #111; color: #fff; font-family: sans-serif; text-align: center; padding: 1rem; }
+    .genre { margin: 0.5rem; padding: 1rem; background: #222; border-radius: 8px; display: inline-block; width: 40%; cursor: pointer; }
+    .genre.selected { background: #0a84ff; color: white; }
+    button { margin-top: 2rem; padding: 1rem 2rem; font-size: 1.1rem; }
+  </style>
+</head>
+<body>
+  <h2>ジャンルを選択（最大6つ）</h2>
+  <div id="genres">
+    <div class="genre">一般常識</div>
+    <div class="genre">科学</div>
+    <div class="genre">スポーツ</div>
+    <div class="genre">アニメ</div>
+    <div class="genre">映画</div>
+    <div class="genre">数学</div>
+  </div>
+  <button onclick="startQuiz()">クイズ開始</button>
+
+  <script>
+    const genres = document.querySelectorAll(".genre");
+    genres.forEach(g => {
+      g.addEventListener("click", () => {
+        g.classList.toggle("selected");
+        const selected = document.querySelectorAll(".selected");
+        if (selected.length > 6) g.classList.remove("selected");
+      });
+    });
+
+    function startQuiz() {
+      const selected = Array.from(document.querySelectorAll(".selected")).map(el => el.textContent);
+      if (selected.length === 0) return alert("1ジャンル以上選んでください");
+      alert("選択ジャンル: " + selected.join(", "));
+    }
+  </script>
+</body>
+</html>

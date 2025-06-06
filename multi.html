@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>オンライン対戦</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { background: #111; color: #fff; font-family: sans-serif; text-align: center; padding: 1rem; }
+    input { font-size: 1rem; padding: 0.8rem; width: 80%; margin: 1rem 0; }
+    button { font-size: 1.1rem; padding: 1rem 2rem; margin: 0.5rem; border-radius: 6px; border: none; }
+    .green { background: #0a0; color: white; }
+    .white { background: white; color: black; }
+    .red { background: red; color: white; }
+  </style>
+</head>
+<body>
+  <h2>🌐 オンライン対戦</h2>
+  <input id="name" placeholder="プレイヤー名を入力してください"><br>
+
+  <button class="green" onclick="createRoom()">🏗 ルームを作成</button>
+  <button class="white" onclick="joinRoom()">📖 ルームに参加</button>
+  <button class="red" onclick="history.back()">← 戻る</button>
+
+  <script>
+    function createRoom() {
+      const name = document.getElementById("name").value.trim();
+      if (!name) return alert("名前を入力してください");
+      const id = Math.random().toString(36).substring(2, 8).toUpperCase();
+      alert("ルームID: " + id + "\nこのIDを参加者に伝えてください");
+      location.href = "room.html?room=" + id + "&host=true&name=" + encodeURIComponent(name);
+    }
+
+    function joinRoom() {
+      const name = document.getElementById("name").value.trim();
+      const id = prompt("参加するルームIDを入力");
+      if (!name || !id) return;
+      location.href = "room.html?room=" + id.toUpperCase() + "&name=" + encodeURIComponent(name);
+    }
+  </script>
+</body>
+</html>
