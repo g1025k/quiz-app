@@ -1,15 +1,30 @@
 
 body {
+  background-color: #f0f8ff;
   font-family: sans-serif;
-  padding: 20px;
+  text-align: center;
+  padding-top: 50px;
 }
-button {
-  margin: 5px;
-  padding: 10px 20px;
-  font-size: 16px;
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 30px;
 }
-.selected {
-  background-color: orange;
-  color: white;
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
 }
-    
+
+.mode-button {
+  display: inline-block;
+  background-color: #eee;
+  color: #007bff;
+  padding: 12px 24px;
+  border-radius: 24px;
+  text-decoration: none;
+  font-size: 18px;
+  width: 220px;
+}
