@@ -1,67 +1,71 @@
 
-const genres = ["一般常識", "地理歴史", "科学", "漫画アニメ", "映画", "歌手", "都道府県", "英語", "数学", "ポコチャ"];
-const questions = {
-  "一般常識": [
-    { q: "日本の首都は？", a: ["東京", "大阪", "京都", "名古屋"], c: 0 },
-    { q: "1週間は何日？", a: ["5", "6", "7", "8"], c: 2 }
-  ],
-  "ポコチャ": [
-    { q: "ポコチャのマスコットの色は？", a: ["ピンク", "青", "緑", "黄色"], c: 1 },
-    { q: "ポコチャで配信されるコンテンツは？", a: ["ライブ配信", "音楽CD", "漫画", "写真"], c: 0 }
-  ]
-};
+const questions = [
+  {
+    question: "富士山の高さは？",
+    choices: ["3,776m", "2,500m", "4,100m"],
+    answer: 0,
+    explanation: "富士山の標高は3,776メートルです。"
+  },
+  {
+    question: "水の化学式は？",
+    choices: ["H2O", "CO2", "NaCl"],
+    answer: 0,
+    explanation: "水は水素2つと酸素1つで構成されています。"
+  },
+  {
+    question: "ポコチャのキャラ「あい」の口癖は？",
+    choices: ["やった～", "まじで！", "ねぇねぇ"],
+    answer: 2,
+    explanation: "キャラ「あい」の口癖は「ねぇねぇ」です。"
+  }
+];
 
-let selectedGenres = [];
-const genreContainer = document.getElementById("genres");
-const startBtn = document.getElementById("startQuiz");
+let current = 0;
+let startTime;
+const questionEl = document.getElementById("question");
+const choicesEl = document.getElementById("choices");
+const resultEl = document.getElementById("result");
 
-genres.forEach(name => {
-  const btn = document.createElement("button");
-  btn.textContent = name;
-  btn.onclick = () => {
-    btn.classList.toggle("selected");
-    if (selectedGenres.includes(name)) {
-      selectedGenres = selectedGenres.filter(g => g !== name);
-    } else if (selectedGenres.length < 6) {
-      selectedGenres.push(name);
-    } else {
-      alert("最大6ジャンルまで選択可能です");
-      return;
-    }
-    startBtn.disabled = selectedGenres.length === 0;
-  };
-  genreContainer.appendChild(btn);
-});
+function showQuestion() {
+  if (current >= questions.length) {
+    resultEl.innerHTML += "<p>全問終了！スコア: " + score + " / " + questions.length + "</p>";
+    resultEl.innerHTML += "<button onclick='location.href="index.html"'>トップに戻る</button>";
+    return;
+  }
 
-startBtn.onclick = () => {
-  const quizDiv = document.getElementById("quiz");
-  quizDiv.style.display = "block";
-  genreContainer.style.display = "none";
-  startBtn.style.display = "none";
+  questionEl.textContent = questions[current].question;
+  choicesEl.innerHTML = "";
+  resultEl.textContent = "";
 
-  let selectedQuestions = [];
-  selectedGenres.forEach(g => {
-    if (questions[g]) selectedQuestions.push(...questions[g]);
-  });
+  startTime = new Date();
 
-  selectedQuestions = selectedQuestions.sort(() => 0.5 - Math.random()).slice(0, 6);
-
-  let index = 0;
-  const render = () => {
-    const q = selectedQuestions[index];
-    quizDiv.innerHTML = `<h2>Q${index + 1}: ${q.q}</h2>`;
-    q.a.forEach((ans, i) => {
-      const b = document.createElement("button");
-      b.textContent = ans;
-      b.onclick = () => {
-        if (i === q.c) alert("正解！");
-        else alert("不正解！");
-        index++;
-        if (index < selectedQuestions.length) render();
-        else quizDiv.innerHTML = "<h2>終了！おつかれさまでした。</h2>";
-      };
-      quizDiv.appendChild(b);
+  setTimeout(() => {
+    questions[current].choices.forEach((choice, idx) => {
+      const li = document.createElement("li");
+      const btn = document.createElement("button");
+      btn.textContent = choice;
+      btn.onclick = () => selectAnswer(idx);
+      li.appendChild(btn);
+      choicesEl.appendChild(li);
     });
-  };
-  render();
-};
+  }, 10000);
+}
+
+let score = 0;
+
+function selectAnswer(index) {
+  const endTime = new Date();
+  const elapsed = Math.round((endTime - startTime) / 1000);
+  const q = questions[current];
+  const correct = index === q.answer;
+  if (correct) score++;
+
+  resultEl.innerHTML = "<p>" + (correct ? "正解！" : "不正解…") + "</p>";
+  resultEl.innerHTML += "<p>" + q.explanation + "</p>";
+  resultEl.innerHTML += "<p>回答時間: " + elapsed + " 秒</p>";
+
+  current++;
+  setTimeout(showQuestion, 3000);
+}
+
+showQuestion();

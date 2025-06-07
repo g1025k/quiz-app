@@ -2,15 +2,16 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ジャンル選択</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>1人用クイズ</title>
   <link rel="stylesheet" href="style.css" />
-  <script defer src="solo.js"></script>
 </head>
 <body>
-  <h1>ジャンルを選んでください</h1>
-  <div id="genre-buttons"></div>
-  <button id="random-btn">ランダムに選ぶ</button>
-  <button id="start-btn" disabled>クイズ開始</button>
+  <div class="container" id="quiz-container">
+    <h1 id="question">読み込み中...</h1>
+    <ul id="choices" class="choices"></ul>
+    <div id="result" class="result"></div>
+  </div>
+  <script src="main.js"></script>
 </body>
 </html>
