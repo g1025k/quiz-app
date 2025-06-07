@@ -1,71 +1,66 @@
 
 const questions = [
-  {
-    question: "富士山の高さは？",
-    choices: ["3,776m", "2,500m", "4,100m"],
-    answer: 0,
-    explanation: "富士山の標高は3,776メートルです。"
-  },
-  {
-    question: "水の化学式は？",
-    choices: ["H2O", "CO2", "NaCl"],
-    answer: 0,
-    explanation: "水は水素2つと酸素1つで構成されています。"
-  },
-  {
-    question: "ポコチャのキャラ「あい」の口癖は？",
-    choices: ["やった～", "まじで！", "ねぇねぇ"],
-    answer: 2,
-    explanation: "キャラ「あい」の口癖は「ねぇねぇ」です。"
-  }
+    {
+        question: "第二次世界大戦で日本が1941年に攻撃したアメリカの軍港はどこか。",
+        choices: ["真珠湾", "サイパン", "ミッドウェー", "グアム"],
+        correct: 0,
+        explanation: "真珠湾攻撃により、日本とアメリカは正式に開戦しました。これが太平洋戦争の始まりです。"
+    },
+    {
+        question: "日本の首都はどこ？",
+        choices: ["大阪", "東京", "福岡", "札幌"],
+        correct: 1,
+        explanation: "日本の首都は東京です。"
+    }
 ];
 
-let current = 0;
-let startTime;
-const questionEl = document.getElementById("question");
-const choicesEl = document.getElementById("choices");
-const resultEl = document.getElementById("result");
-
-function showQuestion() {
-  if (current >= questions.length) {
-    resultEl.innerHTML += "<p>全問終了！スコア: " + score + " / " + questions.length + "</p>";
-    resultEl.innerHTML += "<button onclick='location.href="index.html"'>トップに戻る</button>";
-    return;
-  }
-
-  questionEl.textContent = questions[current].question;
-  choicesEl.innerHTML = "";
-  resultEl.textContent = "";
-
-  startTime = new Date();
-
-  setTimeout(() => {
-    questions[current].choices.forEach((choice, idx) => {
-      const li = document.createElement("li");
-      const btn = document.createElement("button");
-      btn.textContent = choice;
-      btn.onclick = () => selectAnswer(idx);
-      li.appendChild(btn);
-      choicesEl.appendChild(li);
-    });
-  }, 10000);
-}
-
+let currentIndex = 0;
 let score = 0;
 
-function selectAnswer(index) {
-  const endTime = new Date();
-  const elapsed = Math.round((endTime - startTime) / 1000);
-  const q = questions[current];
-  const correct = index === q.answer;
-  if (correct) score++;
+const questionBox = document.getElementById("question-box");
+const choicesList = document.getElementById("choices");
+const feedbackBox = document.getElementById("feedback");
+const nextButton = document.getElementById("next-button");
 
-  resultEl.innerHTML = "<p>" + (correct ? "正解！" : "不正解…") + "</p>";
-  resultEl.innerHTML += "<p>" + q.explanation + "</p>";
-  resultEl.innerHTML += "<p>回答時間: " + elapsed + " 秒</p>";
-
-  current++;
-  setTimeout(showQuestion, 3000);
+function showQuestion() {
+    const q = questions[currentIndex];
+    questionBox.textContent = q.question;
+    choicesList.innerHTML = "";
+    feedbackBox.textContent = "";
+    q.choices.forEach((choice, index) => {
+        const li = document.createElement("li");
+        const btn = document.createElement("button");
+        btn.textContent = choice;
+        btn.onclick = () => handleAnswer(index);
+        li.appendChild(btn);
+        choicesList.appendChild(li);
+    });
 }
+
+function handleAnswer(selected) {
+    const q = questions[currentIndex];
+    const correct = q.correct;
+    if (selected === correct) {
+        score++;
+        feedbackBox.innerHTML = "正解！<br>答え：" + q.choices[correct] + "<br>解説：" + q.explanation;
+    } else {
+        feedbackBox.innerHTML = "不正解！<br>正解：" + q.choices[correct] + "<br>解説：" + q.explanation;
+    }
+    Array.from(choicesList.getElementsByTagName("button")).forEach(btn => {
+        btn.disabled = true;
+    });
+}
+
+nextButton.onclick = () => {
+    currentIndex++;
+    if (currentIndex < questions.length) {
+        showQuestion();
+    } else {
+        questionBox.textContent = "全てのクイズが終了しました！あなたのスコアは " + score + " / " + questions.length;
+        choicesList.innerHTML = "";
+        feedbackBox.innerHTML = '<a href="index.html">トップに戻る</a>';
+        nextButton.style.display = "none";
+    }
+};
 
 showQuestion();

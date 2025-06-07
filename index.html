@@ -1,15 +1,20 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>クイズアプリ</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>クイズアプリ</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>クイズであそぼう！</h1>
-    <button onclick="location.href='solo.html'">1人用モード</button>
-  </div>
+    <div class="quiz-container">
+        <h1 id="question-title">クイズアプリ</h1>
+        <div id="question-box" class="question-box"></div>
+        <ul id="choices" class="choices"></ul>
+        <div id="feedback" class="feedback"></div>
+        <button id="next-button" class="next-button">次へ</button>
+    </div>
+    <script src="main.js"></script>
 </body>
 </html>
