@@ -1,16 +1,18 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>1人用クイズ</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>ジャンル選択</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <div class="container">
     <h1>ジャンルを選んでください</h1>
-    <div id="genre-buttons"></div>
-    <button id="startButton" style="display:none;">クイズ開始</button>
+    <div id="genres" class="genre-buttons"></div>
+    <button id="startQuiz" disabled>クイズ開始</button>
+    <div id="quiz" style="display:none;"></div>
   </div>
   <script src="main.js"></script>
 </body>

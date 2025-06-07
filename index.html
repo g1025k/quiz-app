@@ -1,16 +1,19 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>クイズアプリ</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <div class="container">
-    <h1>🧠 クイズ大会へようこそ！</h1>
-    <button onclick="location.href='solo.html'">1人用モード</button>
-    <button onclick="location.href='multi.html'">みんなで遊ぶ</button>
+    <h1>クイズであそぼう！</h1>
+    <div class="button-group">
+      <button onclick="location.href='solo.html'">1人用モード</button>
+      <button disabled style="opacity: 0.5;">みんなで遊ぶ</button>
+    </div>
   </div>
 </body>
 </html>
