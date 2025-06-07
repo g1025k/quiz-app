@@ -1,54 +1,55 @@
-const urlParams = new URLSearchParams(window.location.search);
-const genres = JSON.parse(decodeURIComponent(urlParams.get("genres")));
-const quizContainer = document.getElementById("quiz-container");
-const questionEl = document.getElementById("question");
-const choicesEl = document.getElementById("choices");
-const feedbackEl = document.getElementById("feedback");
-const timerEl = document.getElementById("timer");
-
-let current = 0;
+let questions = [];
+let currentIndex = 0;
 let score = 0;
-let startTime = 0;
 
-const questions = Array.from({ length: 6 }).map((_, i) => ({
-  question: `(${genres[i]}) 問題${i + 1}の内容です。`,
-  correct: "正解",
-  options: ["正解", "不正解A", "不正解B"],
-  explanation: "これは正解の理由です。"
-}));
-
-function showQuestion() {
-  const q = questions[current];
-  questionEl.textContent = q.question;
-  choicesEl.innerHTML = "";
-  feedbackEl.textContent = "";
-  timerEl.textContent = "";
-
-  startTime = Date.now();
-  setTimeout(() => {
-    q.options.forEach(opt => {
-      const btn = document.createElement("button");
-      btn.textContent = opt;
-      btn.onclick = () => {
-        const timeTaken = ((Date.now() - startTime) / 1000).toFixed(1);
-        if (opt === q.correct) {
-          score++;
-          feedbackEl.textContent = `⭕ 正解！ (${timeTaken}秒) 解説: ${q.explanation}`;
-        } else {
-          feedbackEl.textContent = `❌ 不正解 (${timeTaken}秒) 解説: ${q.explanation}`;
-        }
-        setTimeout(() => {
-          current++;
-          if (current < questions.length) {
-            showQuestion();
-          } else {
-            quizContainer.innerHTML = `<h1>スコア: ${score} / 6</h1><button onclick="location.href='index.html'">トップに戻る</button>`;
-          }
-        }, 3000);
-      };
-      choicesEl.appendChild(btn);
+fetch('questions.json')
+    .then(response => response.json())
+    .then(data => {
+        questions = shuffleArray(data).slice(0, 6);
+        showNextQuestion();
     });
-  }, 10000);
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }
 
-showQuestion();
+function showNextQuestion() {
+    const container = document.getElementById("quiz-container");
+    const questionElem = document.getElementById("question");
+    const choicesElem = document.getElementById("choices");
+    const feedbackElem = document.getElementById("feedback");
+    const nextBtn = document.getElementById("next-btn");
+
+    feedbackElem.innerHTML = "";
+    choicesElem.innerHTML = "";
+    nextBtn.style.display = "none";
+
+    if (currentIndex >= questions.length) {
+        questionElem.innerHTML = `終了！あなたのスコアは ${score} / ${questions.length} です。<br><br><a href="index.html">トップに戻る</a>`;
+        return;
+    }
+
+    const q = questions[currentIndex];
+    questionElem.innerText = q.question;
+
+    q.choices.forEach((choice, i) => {
+        const btn = document.createElement("button");
+        btn.innerText = choice;
+        btn.onclick = () => {
+            if (i === q.answer) {
+                score++;
+                feedbackElem.innerHTML = "<p style='color:green;'>正解！</p><p>" + q.explanation + "</p>";
+            } else {
+                feedbackElem.innerHTML = "<p style='color:red;'>不正解！</p><p>正解は「" + q.choices[q.answer] + "」です。<br>" + q.explanation + "</p>";
+            }
+            nextBtn.style.display = "block";
+        };
+        choicesElem.appendChild(btn);
+    });
+
+    currentIndex++;
+}

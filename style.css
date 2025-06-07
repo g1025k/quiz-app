@@ -1,1 +1,22 @@
-body { font-family: sans-serif; background: linear-gradient(to bottom, #e0f7fa, #fff); }
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom right, #dceeff, #ffffff);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    text-align: center;
+}
+button {
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 15px 30px;
+    font-size: 16px;
+    cursor: pointer;
+}

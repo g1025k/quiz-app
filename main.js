@@ -1,1 +1,3 @@
-// JavaScript placeholder
+async function startQuiz() {
+    window.location.href = "quiz.html";
+}
