@@ -1,18 +1,34 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>クイズ</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="quiz-container" id="quiz-container">
-    <h2 id="question-number">Q1</h2>
-    <div id="question-text">問題文</div>
-    <div id="options"></div>
-    <div id="feedback" class="feedback"></div>
+  <div class="container" id="quiz-container">
+    読み込み中...
   </div>
-  <script src="main.js"></script>
+  <script>
+    async function loadQuiz() {
+      const res = await fetch("quiz-data/general.json");
+      const questions = await res.json();
+      const question = questions[Math.floor(Math.random() * questions.length)];
+      const container = document.getElementById("quiz-container");
+      container.innerHTML = `
+        <h2>${question.question}</h2>
+        ${question.choices.map(choice => `<button onclick="checkAnswer('${choice}', '${question.answer}', '${question.explanation}')">${choice}</button>`).join("<br>")}
+      `;
+    }
+
+    function checkAnswer(choice, answer, explanation) {
+      const correct = choice === answer;
+      alert((correct ? "正解！" : "不正解...") + "\n" + explanation);
+      location.reload();
+    }
+
+    loadQuiz();
+  </script>
 </body>
 </html>
